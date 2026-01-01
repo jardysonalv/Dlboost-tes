@@ -1,0 +1,26 @@
+name: Build APK
+on: 
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # Usamos uma action pronta que instala o Buildozer e o Java sem erros
+      - name: Build with Buildozer
+        uses: ArtemSerebriennikov/buildozer-action@v1
+        with:
+          buildozer_version: master
+          command: android debug
+          repository_root: .
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: DLBOOST-PRO-APK
+          path: bin/*.apk
